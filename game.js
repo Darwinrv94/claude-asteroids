@@ -62,6 +62,12 @@ const RADII  = [0, 16, 30, 50];   // por tamaño 1, 2, 3
 const SPEEDS = [0, 85, 55, 32];   // velocidad base por tamaño
 const POINTS = [0, 100, 50, 20];  // puntos por tamaño
 
+// Vértices normalizados (radio máx = 1) de la variante fija de asteroide grande
+const BIG_SHAPE = [
+  [-0.11, -0.98], [0.44, -0.82], [0.33, -0.22], [0.89, -0.05], [0.73, 0.56],
+  [0.24, 0.54], [0.01, 0.94], [-0.68, 0.60], [-1.00, 0.03], [-0.85, -0.58],
+];
+
 class Asteroid {
   constructor(x, y, size = 3) {
     this.x    = x;
@@ -76,6 +82,12 @@ class Asteroid {
     this.vy = Math.sin(angle) * speed;
     this.rotSpeed = rand(-1.2, 1.2);
     this.rot = rand(0, Math.PI * 2);
+
+    if (size === 3 && Math.random() < 0.25) {
+      // Variante fija de asteroide grande (dibujada a mano, escalada al radio)
+      this.verts = BIG_SHAPE.map(([vx, vy]) => [vx * this.radius, vy * this.radius]);
+      return;
+    }
 
     // Polígono irregular
     const n = randInt(8, 13);
